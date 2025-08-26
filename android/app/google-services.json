@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "122141441145",
+    "project_id": "nuvida-c9f71",
+    "storage_bucket": "nuvida-c9f71.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:122141441145:android:57f397fba3a5b23ea568a8",
+        "android_client_info": {
+          "package_name": "com.nuvida.studentlife"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUNdjBGVm7JRwntYKDZ7Gj-uOtA-O5tJI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
