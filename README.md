@@ -122,9 +122,7 @@ lib/
 - [ ] Takvim entegrasyonu
 - [ ] Bulut senkronizasyonu
 - [ ] Çoklu dil desteği
-- [ ] Karanlık tema
 - [ ] Widget desteği
-- [ ] Offline çalışma modu
 
 ## 📋 Kullanım
 
@@ -133,22 +131,12 @@ lib/
 3. **Hedef Belirleme**: Hedefler ekranında + butonuna tıklayın
 4. **Ekran Geçişi**: Sol üst köşedeki menü ikonuna tıklayın
 
-## 🤝 Katkıda Bulunma
 
-1. Fork yapın
-2. Feature branch oluşturun (`git checkout -b feature/AmazingFeature`)
-3. Commit yapın (`git commit -m 'Add some AmazingFeature'`)
-4. Push yapın (`git push origin feature/AmazingFeature`)
-5. Pull Request oluşturun
-
-## 📄 Lisans
-
-Bu proje MIT lisansı altında lisanslanmıştır.
 
 ## 📞 İletişim
 
 - **Proje**: [Nuvida GitHub](https://github.com/yourusername/nuvida)
-- **Geliştirici**: [Your Name](mailto:your.email@example.com)
+- **Geliştirici**: [Halim Yasin Zümre](mailto:halimyasinz@gmail.com)
 
 ---
 
