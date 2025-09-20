@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/course.dart'; // Course modelini import et
 import '../services/hive_service.dart';
@@ -83,6 +82,16 @@ class _CourseScheduleScreenState extends State<CourseScheduleScreen> {
       grouped[turkishDay]!.add(course);
     }
 
+    // Her gün için dersleri başlangıç saatine göre sırala
+    grouped.forEach((day, courses) {
+      courses.sort((a, b) {
+        // Saat formatını parse et (HH:mm)
+        final aTime = _parseTime(a.startTime);
+        final bTime = _parseTime(b.startTime);
+        return aTime.compareTo(bTime);
+      });
+    });
+
     // Debug: Gruplandırılmış dersleri yazdır
     print('Gruplandırılmış dersler:');
     grouped.forEach((day, courses) {
@@ -111,6 +120,19 @@ class _CourseScheduleScreenState extends State<CourseScheduleScreen> {
     }
 
     return ordered;
+  }
+
+  // Saat string'ini DateTime'a çevir (HH:mm formatı için)
+  DateTime _parseTime(String timeString) {
+    try {
+      final parts = timeString.split(':');
+      final hour = int.parse(parts[0]);
+      final minute = int.parse(parts[1]);
+      return DateTime(2024, 1, 1, hour, minute);
+    } catch (e) {
+      // Hata durumunda varsayılan saat döndür
+      return DateTime(2024, 1, 1, 0, 0);
+    }
   }
 
   void _addCourse() {
@@ -375,101 +397,9 @@ class _CourseScheduleScreenState extends State<CourseScheduleScreen> {
                                  final course = dayCourses[courseIndex];
                                  return Container(
                                    margin: const EdgeInsets.only(bottom: 8),
-                                   child: Slidable(
-                                     endActionPane: ActionPane(
-                                       motion: const ScrollMotion(),
-                                       children: [
-                                         SlidableAction(
-                                           onPressed: (_) => _deleteCourse(course),
-                                           backgroundColor: AppTheme.highRisk,
-                                           foregroundColor: Colors.white,
-                                           icon: Icons.delete,
-                                           label: 'Sil',
-                                         ),
-                                       ],
-                                     ),
-                                     child: Card(
-                                       elevation: 2,
-                                       child: Padding(
-                                         padding: const EdgeInsets.all(12),
-                                         child: Column(
-                                           crossAxisAlignment: CrossAxisAlignment.start,
-                                           children: [
-                                             Text(
-                                               course.name,
-                                               style: GoogleFonts.notoSans(
-                                                 fontWeight: FontWeight.bold,
-                                                 fontSize: 16,
-                                               ),
-                                               maxLines: 2,
-                                               overflow: TextOverflow.ellipsis,
-                                             ),
-                                             const SizedBox(height: 8),
-                                             Row(
-                                               children: [
-                                                 Icon(
-                                                   Icons.person,
-                                                   size: 14,
-                                                   color: AppTheme.textSecondary,
-                                                 ),
-                                                 const SizedBox(width: 4),
-                                                 Expanded(
-                                                   child: Text(
-                                                     course.instructor,
-                                                     style: GoogleFonts.notoSans(
-                                                       color: AppTheme.textSecondary,
-                                                       fontSize: 12,
-                                                     ),
-                                                     maxLines: 1,
-                                                     overflow: TextOverflow.ellipsis,
-                                                   ),
-                                                 ),
-                                               ],
-                                             ),
-                                             const SizedBox(height: 4),
-                                             Row(
-                                               children: [
-                                                 Icon(
-                                                   Icons.access_time,
-                                                   size: 14,
-                                                   color: AppTheme.textSecondary,
-                                                 ),
-                                                 const SizedBox(width: 4),
-                                                 Text(
-                                                   "${course.startTime} - ${course.endTime}",
-                                                   style: GoogleFonts.notoSans(
-                                                     color: AppTheme.textSecondary,
-                                                     fontSize: 12,
-                                                   ),
-                                                 ),
-                                               ],
-                                             ),
-                                             const SizedBox(height: 4),
-                                             Row(
-                                               children: [
-                                                 Icon(
-                                                   Icons.location_on,
-                                                   size: 14,
-                                                   color: AppTheme.textSecondary,
-                                                 ),
-                                                 const SizedBox(width: 4),
-                                                 Expanded(
-                                                   child: Text(
-                                                     course.location,
-                                                     style: GoogleFonts.notoSans(
-                                                       color: AppTheme.textSecondary,
-                                                       fontSize: 12,
-                                                     ),
-                                                     maxLines: 1,
-                                                     overflow: TextOverflow.ellipsis,
-                                                   ),
-                                                 ),
-                                               ],
-                                             ),
-                                           ],
-                                         ),
-                                       ),
-                                     ),
+                                   child: _FlipCard(
+                                     course: course,
+                                     onDelete: () => _deleteCourse(course),
                                    ),
                                  );
                                },
@@ -568,7 +498,7 @@ class _AddCourseDialogState extends State<_AddCourseDialog> {
               children: [
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    value: _selectedDay,
+                    initialValue: _selectedDay,
                     decoration: const InputDecoration(
                       labelText: 'Gün',
                       border: OutlineInputBorder(),
@@ -591,7 +521,7 @@ class _AddCourseDialogState extends State<_AddCourseDialog> {
               children: [
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    value: _selectedStartTime,
+                    initialValue: _selectedStartTime,
                     decoration: const InputDecoration(
                       labelText: 'Başlangıç',
                       border: OutlineInputBorder(),
@@ -610,7 +540,7 @@ class _AddCourseDialogState extends State<_AddCourseDialog> {
                 const SizedBox(width: 16),
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    value: _selectedEndTime,
+                    initialValue: _selectedEndTime,
                     decoration: const InputDecoration(
                       labelText: 'Bitiş',
                       border: OutlineInputBorder(),
@@ -691,5 +621,244 @@ class _AddCourseDialogState extends State<_AddCourseDialog> {
     _instructorController.dispose();
     _locationController.dispose();
     super.dispose();
+  }
+}
+
+// Flip Card Widget - Tıklayınca ters döner ve silme butonu gösterir
+class _FlipCard extends StatefulWidget {
+  final Course course;
+  final VoidCallback onDelete;
+
+  const _FlipCard({
+    required this.course,
+    required this.onDelete,
+  });
+
+  @override
+  State<_FlipCard> createState() => _FlipCardState();
+}
+
+class _FlipCardState extends State<_FlipCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  bool _isFlipped = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _animation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _flip() {
+    if (_isFlipped) {
+      _controller.reverse();
+    } else {
+      _controller.forward();
+    }
+    setState(() {
+      _isFlipped = !_isFlipped;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _flip,
+      child: AnimatedBuilder(
+        animation: _animation,
+        builder: (context, child) {
+          final isShowingFront = _animation.value < 0.5;
+          return Transform(
+            alignment: Alignment.center,
+            transform: Matrix4.identity()
+              ..setEntry(3, 2, 0.001)
+              ..rotateY(_animation.value * 3.14159),
+            child: isShowingFront ? _buildFrontCard() : _buildBackCard(),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildFrontCard() {
+    return Card(
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.course.name,
+              style: GoogleFonts.notoSans(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Icon(
+                  Icons.person,
+                  size: 14,
+                  color: AppTheme.textSecondary,
+                ),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(
+                    widget.course.instructor,
+                    style: GoogleFonts.notoSans(
+                      color: AppTheme.textSecondary,
+                      fontSize: 12,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                Icon(
+                  Icons.access_time,
+                  size: 14,
+                  color: AppTheme.textSecondary,
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  "${widget.course.startTime} - ${widget.course.endTime}",
+                  style: GoogleFonts.notoSans(
+                    color: AppTheme.textSecondary,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                Icon(
+                  Icons.location_on,
+                  size: 14,
+                  color: AppTheme.textSecondary,
+                ),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(
+                    widget.course.location,
+                    style: GoogleFonts.notoSans(
+                      color: AppTheme.textSecondary,
+                      fontSize: 12,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.touch_app,
+                  size: 16,
+                  color: AppTheme.textSecondary,
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  'Silme için dokun',
+                  style: GoogleFonts.notoSans(
+                    color: AppTheme.textSecondary,
+                    fontSize: 10,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBackCard() {
+    return Transform(
+      alignment: Alignment.center,
+      transform: Matrix4.identity()..rotateY(3.14159), // Back card'ı tekrar çevir
+      child: Card(
+        elevation: 2,
+        color: AppTheme.highRisk,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.delete,
+                size: 32,
+                color: Colors.white,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Dersi Sil',
+                style: GoogleFonts.notoSans(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: () {
+                  _flip(); // Önce kartı çevir
+                  widget.onDelete(); // Sonra sil
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: AppTheme.highRisk,
+                ),
+                child: Text(
+                  'Sil',
+                  style: GoogleFonts.notoSans(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 4),
+              TextButton(
+                onPressed: _flip,
+                child: Text(
+                  'İptal',
+                  style: GoogleFonts.notoSans(
+                    color: Colors.white70,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

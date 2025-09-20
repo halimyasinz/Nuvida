@@ -6,7 +6,7 @@ class AppTheme {
   static const Color backgroundGhostWhite = Color(0xFFF8F9FF); // Ana Arka Plan
   static const Color cardBackground = Color(0xFFF4F6FA);     // Kart/Sekme Arka Planı
   static const Color textPrimary = Color(0xFF212121);        // Ana Metin
-  static const Color textSecondary = Color(0xFF90A4AE);      // İkincil Metin
+  static const Color textSecondary = Color(0xFF333333);      // İkincil Metin (daha koyu)
   static const Color accentBlue = Color(0xFF2196F3);         // Vurgu
   static const Color actionAmber = Color(0xFFFFC107);        // Aksiyon/İkincil
   static const Color successGreen = Color(0xFF43A047);       // Başarı/Olumlu
@@ -73,11 +73,9 @@ class AppTheme {
         primary: primaryIndigo,
         secondary: goalLavender,
         surface: cardBackground,
-        background: backgroundGhostWhite,
         onPrimary: Colors.white,
         onSecondary: Colors.white,
         onSurface: textPrimary,
-        onBackground: textPrimary,
         error: warningRed,
         onError: Colors.white,
       ),
@@ -143,11 +141,9 @@ class AppTheme {
         primary: primaryIndigo,
         secondary: darkGoalLavender,
         surface: darkCardBackground,
-        background: darkBackground,
         onPrimary: Colors.white,
         onSecondary: Colors.white,
         onSurface: darkTextPrimary,
-        onBackground: darkTextPrimary,
         error: darkWarningRed,
         onError: Colors.white,
       ),

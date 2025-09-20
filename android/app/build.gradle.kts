@@ -9,7 +9,7 @@ plugins {
 android {
     namespace = "com.nuvida.studentlife"
     compileSdk = flutter.compileSdkVersion
-    // ndkVersion = flutter.ndkVersion // CMake hatası için geçici olarak devre dışı
+    ndkVersion = "27.0.12077973" // En yüksek NDK versiyonu (geriye uyumlu)
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

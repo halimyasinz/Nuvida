@@ -12,7 +12,20 @@
           "package_name": "com.nuvida.studentlife"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "122141441145-f9eu2r94b30ls92h2cja4m94cghtum5u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nuvida.studentlife",
+            "certificate_hash": "de5dac49a0a7f950e67ebb35ae5c62dbf61aab12"
+          }
+        },
+        {
+          "client_id": "122141441145-uo7j8n5tj9nkms5fmctvce9co3n68884.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAUNdjBGVm7JRwntYKDZ7Gj-uOtA-O5tJI"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "122141441145-uo7j8n5tj9nkms5fmctvce9co3n68884.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

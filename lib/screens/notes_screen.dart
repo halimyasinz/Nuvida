@@ -227,7 +227,7 @@ class _NotesScreenState extends State<NotesScreen> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: _getCategoryColor(note.category ?? 'Genel').withOpacity(0.1),
+                      color: _getCategoryColor(note.category ?? 'Genel').withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
                         color: _getCategoryColor(note.category ?? 'Genel'),
@@ -495,7 +495,7 @@ class _NotesScreenState extends State<NotesScreen> {
                       Text(
                         "Notlarım",
                         style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onBackground,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                       if (_notes.isEmpty)
@@ -679,8 +679,8 @@ class _NotesScreenState extends State<NotesScreen> {
                                               padding: const EdgeInsets.all(AppTheme.spacingS),
                                               decoration: BoxDecoration(
                                                 color: note.isImportant
-                                                    ? AppTheme.mediumRisk.withOpacity(0.1)
-                                                    : AppTheme.primaryPurple.withOpacity(0.1),
+                                                    ? AppTheme.mediumRisk.withValues(alpha: 0.1)
+                                                    : AppTheme.primaryPurple.withValues(alpha: 0.1),
                                                 borderRadius: BorderRadius.circular(AppTheme.radiusS),
                                               ),
                                               child: Icon(
@@ -766,7 +766,7 @@ class _NotesScreenState extends State<NotesScreen> {
                                                 vertical: 4,
                                               ),
                                               decoration: BoxDecoration(
-                                                color: _getCategoryColor(note.category ?? 'Genel').withOpacity(0.1),
+                                                color: _getCategoryColor(note.category ?? 'Genel').withValues(alpha: 0.1),
                                                 borderRadius: BorderRadius.circular(AppTheme.radiusS),
                                                 border: Border.all(
                                                   color: _getCategoryColor(note.category ?? 'Genel'),
@@ -1004,19 +1004,10 @@ class _AddNoteDialogState extends State<_AddNoteDialog> {
               onSubmitted: (_) => _submit(),
             ),
             const SizedBox(height: 20),
-                         TextField(
-               controller: _courseController,
-               decoration: InputDecoration(
-                 labelText: 'Ders (Opsiyonel)',
-                 border: const OutlineInputBorder(),
-                 labelStyle: Theme.of(context).textTheme.bodyMedium,
-               ),
-             ),
-             const SizedBox(height: 20),
              
              // Kategori seçimi
              DropdownButtonFormField<String>(
-               value: _selectedCategory,
+               initialValue: _selectedCategory,
                decoration: InputDecoration(
                  labelText: 'Kategori',
                  border: const OutlineInputBorder(),
@@ -1103,7 +1094,6 @@ class _AddNoteDialogState extends State<_AddNoteDialog> {
     
     final title = _titleController.text.trim();
     final content = _contentController.text.trim();
-    final courseName = _courseController.text.trim();
 
     print('Title: $title, Content: $content, Category: $_selectedCategory, Tags: $_tags');
 
@@ -1127,7 +1117,7 @@ class _AddNoteDialogState extends State<_AddNoteDialog> {
         content: content,
         createdAt: widget.note?.createdAt ?? DateTime.now(),
         lastModified: DateTime.now(),
-        courseName: courseName.isEmpty ? null : courseName,
+        courseName: null,
         tags: List<String>.from(_tags),
         isImportant: _isImportant,
         category: _selectedCategory,

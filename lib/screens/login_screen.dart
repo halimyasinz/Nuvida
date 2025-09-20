@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
 
@@ -150,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
         // Giriş başarılı, ana sayfaya yönlendir
         _navigateToHome();
       } else {
-        _showErrorSnackBar('Google ile giriş başarısız');
+        _showErrorSnackBar('Google ile giriş iptal edildi veya başarısız oldu');
       }
     } catch (e) {
       _showErrorSnackBar('Giriş hatası: $e');
